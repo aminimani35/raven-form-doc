@@ -1,10 +1,18 @@
 import { defineConfig } from 'vitepress'
+import { writeFileSync } from 'fs'
+import { resolve } from 'path'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   title: "Full-Featured Form-Engine",
   description: "RavenForm",
   base: '/raven-form-doc/',
+
+  // Build hook to create .nojekyll file for GitHub Pages
+  buildEnd({ outDir }) {
+    const nojekyllPath = resolve(outDir, '.nojekyll')
+    writeFileSync(nojekyllPath, '', 'utf-8')
+  },
 
   locales: {
     root: {
