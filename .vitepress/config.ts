@@ -4,7 +4,7 @@ import { defineConfig } from 'vitepress'
 export default defineConfig({
   title: "Full-Featured Form-Engine",
   description: "RavenForm",
-  
+
   locales: {
     root: {
       label: 'English',
