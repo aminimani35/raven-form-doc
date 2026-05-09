@@ -20,6 +20,7 @@ yarn add raven-form
 
 Voici un exemple simple pour créer votre premier formulaire :
 
+{% raw %}
 ```tsx
 import { RavenForm } from 'raven-form';
 
@@ -49,6 +50,7 @@ function MonFormulaire() {
   );
 }
 ```
+{% endraw %}
 
 ## Configuration du Formulaire
 
