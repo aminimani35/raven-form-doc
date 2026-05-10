@@ -104,46 +104,6 @@ interface UIFieldProps {
 
 ## ساخت آداپتور UI سفارشی
 
-```tsx
-import { createUIAdapter } from 'raven-form'
-import type { UIFieldProps, UIFormItemProps } from 'raven-form'
+راهنمای کامل گام‌به‌گام — شامل تمام ۱۳ نوع فیلد، ظرف `FormItem`، کامپوننت `fallback`، `createUIAdapter`، ثبت سراسری و ارسال props اضافی — در صفحه اختصاصی زیر موجود است:
 
-const TextInput = ({ value, onChange, onBlur, placeholder, disabled, type, error }: UIFieldProps) => (
-  <input
-    type={type ?? 'text'}
-    value={(value as string) ?? ''}
-    onChange={(e) => onChange(e.target.value)}
-    onBlur={onBlur}
-    placeholder={placeholder}
-    disabled={disabled}
-    style={{ border: error ? '1px solid red' : '1px solid #ccc', padding: 6 }}
-  />
-)
-
-const FormItem = ({ label, error, description, required, children }: UIFormItemProps) => (
-  <div style={{ marginBottom: 12 }}>
-    {label && <label>{label}{required && <span style={{ color: 'red' }}> *</span>}</label>}
-    {children}
-    {error && <p style={{ color: 'red', fontSize: 12 }}>{error}</p>}
-  </div>
-)
-
-export const MyUIAdapter = createUIAdapter({
-  components: {
-    text: TextInput,      // fallback برای email/tel/url/number/password/time/datetime
-    textarea: ({ value, onChange, onBlur }: UIFieldProps) => (
-      <textarea value={(value as string) ?? ''} onChange={(e) => onChange(e.target.value)} onBlur={onBlur} />
-    ),
-    select: ({ value, onChange, options }: UIFieldProps) => (
-      <select value={value as string} onChange={(e) => onChange(e.target.value)}>
-        {options?.map((o) => <option key={String(o.value)} value={String(o.value)}>{o.label}</option>)}
-      </select>
-    ),
-    checkbox: ({ value, onChange, label }: UIFieldProps) => (
-      <label><input type="checkbox" checked={Boolean(value)} onChange={(e) => onChange(e.target.checked)} /> {label}</label>
-    ),
-  },
-  FormItem,
-  inlineTypes: ['checkbox', 'switch'],
-})
-```
+👉 **[ساخت UIAdapter سفارشی ←](/fa/guide/custom-ui-adapter)**

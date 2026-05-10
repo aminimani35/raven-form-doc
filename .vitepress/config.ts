@@ -19,6 +19,7 @@ const enSidebar = [
     text: "🎨 UI Adapters",
     items: [
       { text: "Overview", link: "/guide/ui-adapters" },
+      { text: "Custom UI Adapter", link: "/guide/custom-ui-adapter" },
       { text: "Ant Design", link: "/examples/antd" },
       { text: "ShadCN / ui", link: "/examples/shadcn" },
     ],
@@ -69,6 +70,7 @@ const faSidebar = [
     text: "🎨 آداپتورهای UI",
     items: [
       { text: "معرفی", link: "/fa/guide/ui-adapters" },
+      { text: "UIAdapter سفارشی", link: "/fa/guide/custom-ui-adapter" },
       { text: "Ant Design", link: "/fa/examples/antd" },
       { text: "ShadCN / ui", link: "/fa/examples/shadcn" },
     ],

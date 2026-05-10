@@ -119,87 +119,9 @@ import { AntDUIAdapter } from 'raven-form/ui/antd'
 
 ## Building a custom UI adapter
 
-Use `createUIAdapter` to define and validate your adapter with full type safety:
+The complete step-by-step guide — covering all 13 field types (text, textarea, select, multiselect, radio, checkbox, switch, date, file, range, color, rating, otp), the `FormItem` wrapper, the `fallback` component, `createUIAdapter`, global registration, and `componentProps` forwarding — lives in its own dedicated page:
 
-```tsx
-import { createUIAdapter } from 'raven-form'
-import type { UIFieldProps, UIFormItemProps } from 'raven-form'
-
-// ─── Field components ──────────────────────────────────────────────────────────
-const TextInput = ({ value, onChange, onBlur, placeholder, disabled, type, error }: UIFieldProps) => (
-  <input
-    type={type ?? 'text'}
-    value={(value as string) ?? ''}
-    onChange={(e) => onChange(e.target.value)}
-    onBlur={onBlur}
-    placeholder={placeholder}
-    disabled={disabled}
-    style={{ border: error ? '1px solid red' : '1px solid #ccc', padding: 6, width: '100%' }}
-  />
-)
-
-const TextareaInput = ({ value, onChange, onBlur, placeholder, disabled }: UIFieldProps) => (
-  <textarea
-    value={(value as string) ?? ''}
-    onChange={(e) => onChange(e.target.value)}
-    onBlur={onBlur}
-    placeholder={placeholder}
-    disabled={disabled}
-    style={{ width: '100%', padding: 6 }}
-  />
-)
-
-const SelectInput = ({ value, onChange, options }: UIFieldProps) => (
-  <select value={value as string} onChange={(e) => onChange(e.target.value)}>
-    <option value="">Select...</option>
-    {options?.map((o) => (
-      <option key={String(o.value)} value={String(o.value)} disabled={o.disabled}>
-        {o.label}
-      </option>
-    ))}
-  </select>
-)
-
-const CheckboxInput = ({ value, onChange, label }: UIFieldProps) => (
-  <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-    <input
-      type="checkbox"
-      checked={Boolean(value)}
-      onChange={(e) => onChange(e.target.checked)}
-    />
-    {label}
-  </label>
-)
-
-// ─── FormItem wrapper ─────────────────────────────────────────────────────────
-const FormItem = ({ label, error, description, required, children }: UIFormItemProps) => (
-  <div style={{ marginBottom: 12 }}>
-    {label && (
-      <label style={{ display: 'block', marginBottom: 4, fontWeight: 500 }}>
-        {label}{required && <span style={{ color: 'red' }}> *</span>}
-      </label>
-    )}
-    {children}
-    {description && <p style={{ color: '#888', fontSize: 12 }}>{description}</p>}
-    {error && <p style={{ color: 'red', fontSize: 12 }}>{error}</p>}
-  </div>
-)
-
-// ─── Assemble adapter ─────────────────────────────────────────────────────────
-export const MyUIAdapter = createUIAdapter({
-  components: {
-    text:      TextInput,    // also handles email/tel/url/number/password/time/datetime
-    textarea:  TextareaInput,
-    select:    SelectInput,
-    multiselect: SelectInput, // re-use or provide a multi-select variant
-    radio:     SelectInput,
-    checkbox:  CheckboxInput,
-    switch:    CheckboxInput,
-  },
-  FormItem,
-  inlineTypes: ['checkbox', 'switch'], // these skip FormItem wrapping
-})
-```
+👉 **[Custom UI Adapter →](/guide/custom-ui-adapter)**
 
 ---
 
@@ -209,13 +131,13 @@ Register a default UI adapter globally so every `<RavenForm>` inside inherits it
 
 ```tsx
 import { RavenFormProvider } from 'raven-form'
-import { MyUIAdapter } from './adapters/myUIAdapter'
+import { MyUIAdapter } from './adapters/MyUIAdapter'
+import { RHFAdapter }  from 'raven-form/adapters/rhf'
 
 function App() {
   return (
-    <RavenFormProvider uiAdapter={MyUIAdapter}>
-      {/* All RavenForm instances use MyUIAdapter by default */}
-      <MyPage />
+    <RavenFormProvider uiAdapter={MyUIAdapter} formAdapter={RHFAdapter}>
+      <MyApp />
     </RavenFormProvider>
   )
 }
@@ -241,8 +163,8 @@ Forward arbitrary props to any UI component via `componentProps` in the field sc
   componentProps: {
     rows: 6,
     autoResize: true,
-  }
+  },
 }
 ```
 
-These are spread onto the component call, available via the index signature on `UIFieldProps`.
+These are spread onto the component via the index signature on `UIFieldProps`.
