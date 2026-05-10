@@ -32,6 +32,81 @@ interface UIAdapter {
 }
 ```
 
+**Example — minimal adapter using plain HTML:**
+
+```tsx
+import { createUIAdapter } from 'raven-form'
+import type { UIFieldProps, UIFormItemProps } from 'raven-form'
+
+// ── Field components ────────────────────────────────────────────────────────
+const TextInput = ({ id, name, value, onChange, onBlur, placeholder, disabled, type, error }: UIFieldProps) => (
+  <input
+    id={id ?? name}
+    type={type ?? 'text'}
+    value={(value as string) ?? ''}
+    placeholder={placeholder}
+    disabled={disabled}
+    aria-invalid={!!error}
+    onChange={(e) => onChange(e.target.value)}
+    onBlur={onBlur}
+  />
+)
+
+const SelectInput = ({ id, name, value, onChange, onBlur, options = [], disabled }: UIFieldProps) => (
+  <select id={id ?? name} value={(value as string) ?? ''} disabled={disabled}
+    onChange={(e) => onChange(e.target.value)} onBlur={onBlur}>
+    <option value=''>— Select —</option>
+    {options.map((o) => (
+      <option key={String(o.value)} value={String(o.value)} disabled={o.disabled}>{o.label}</option>
+    ))}
+  </select>
+)
+
+const CheckboxInput = ({ name, value, onChange, label, disabled }: UIFieldProps) => (
+  <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+    <input type='checkbox' name={name} checked={Boolean(value)}
+      disabled={disabled} onChange={(e) => onChange(e.target.checked)} />
+    <span>{label}</span>
+  </label>
+)
+
+// ── FormItem wrapper (label + error + description chrome) ───────────────────
+const FormItem = ({ label, error, description, required, children }: UIFormItemProps) => (
+  <div style={{ display: 'flex', flexDirection: 'column', gap: 4, marginBottom: 12 }}>
+    {label && (
+      <label style={{ fontWeight: 500, fontSize: 14 }}>
+        {label}{required && <span style={{ color: '#ef4444' }}> *</span>}
+      </label>
+    )}
+    {children}
+    {description && !error && <p style={{ color: '#6b7280', fontSize: 12, margin: 0 }}>{description}</p>}
+    {error && <p style={{ color: '#ef4444', fontSize: 12, margin: 0 }}>{error}</p>}
+  </div>
+)
+
+// ── Assemble ────────────────────────────────────────────────────────────────
+export const MyUIAdapter = createUIAdapter({
+  components: {
+    text:      TextInput,   // text-family fallback: email/tel/url/number/password/time/datetime
+    textarea:  ({ id, name, value, onChange, onBlur, placeholder, disabled }: UIFieldProps) => (
+      <textarea id={id ?? name} value={(value as string) ?? ''} placeholder={placeholder}
+        disabled={disabled} onChange={(e) => onChange(e.target.value)} onBlur={onBlur} />
+    ),
+    select:    SelectInput,
+    multiselect: SelectInput,
+    radio:     SelectInput,
+    checkbox:  CheckboxInput,
+    switch:    CheckboxInput,
+  },
+  FormItem,
+  inlineTypes: ['checkbox', 'switch'], // skip FormItem for these types
+})
+```
+
+::: tip
+See [Custom UI Adapter](/guide/custom-ui-adapter) for the full guide covering all 13 field types, the `fallback` component, global registration, and `componentProps` forwarding.
+:::
+
 ---
 
 ## `UIFieldProps`

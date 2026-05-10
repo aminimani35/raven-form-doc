@@ -76,6 +76,81 @@ interface UIAdapter {
 }
 ```
 
+**مثال — آداپتور ساده با HTML خالص:**
+
+```tsx
+import { createUIAdapter } from 'raven-form'
+import type { UIFieldProps, UIFormItemProps } from 'raven-form'
+
+// ── کامپوننت‌های فیلد ────────────────────────────────────────────────────────
+const TextInput = ({ id, name, value, onChange, onBlur, placeholder, disabled, type, error }: UIFieldProps) => (
+  <input
+    id={id ?? name}
+    type={type ?? 'text'}
+    value={(value as string) ?? ''}
+    placeholder={placeholder}
+    disabled={disabled}
+    aria-invalid={!!error}
+    onChange={(e) => onChange(e.target.value)}
+    onBlur={onBlur}
+  />
+)
+
+const SelectInput = ({ id, name, value, onChange, onBlur, options = [], disabled }: UIFieldProps) => (
+  <select id={id ?? name} value={(value as string) ?? ''} disabled={disabled}
+    onChange={(e) => onChange(e.target.value)} onBlur={onBlur}>
+    <option value=''>— انتخاب کنید —</option>
+    {options.map((o) => (
+      <option key={String(o.value)} value={String(o.value)} disabled={o.disabled}>{o.label}</option>
+    ))}
+  </select>
+)
+
+const CheckboxInput = ({ name, value, onChange, label, disabled }: UIFieldProps) => (
+  <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+    <input type='checkbox' name={name} checked={Boolean(value)}
+      disabled={disabled} onChange={(e) => onChange(e.target.checked)} />
+    <span>{label}</span>
+  </label>
+)
+
+// ── ظرف FormItem (label + error + description) ───────────────────────────────
+const FormItem = ({ label, error, description, required, children }: UIFormItemProps) => (
+  <div style={{ display: 'flex', flexDirection: 'column', gap: 4, marginBottom: 12 }}>
+    {label && (
+      <label style={{ fontWeight: 500, fontSize: 14 }}>
+        {label}{required && <span style={{ color: '#ef4444' }}> *</span>}
+      </label>
+    )}
+    {children}
+    {description && !error && <p style={{ color: '#6b7280', fontSize: 12, margin: 0 }}>{description}</p>}
+    {error && <p style={{ color: '#ef4444', fontSize: 12, margin: 0 }}>{error}</p>}
+  </div>
+)
+
+// ── ساخت آداپتور ────────────────────────────────────────────────────────────
+export const MyUIAdapter = createUIAdapter({
+  components: {
+    text:       TextInput,  // fallback برای email/tel/url/number/password/time/datetime
+    textarea:   ({ id, name, value, onChange, onBlur, placeholder, disabled }: UIFieldProps) => (
+      <textarea id={id ?? name} value={(value as string) ?? ''} placeholder={placeholder}
+        disabled={disabled} onChange={(e) => onChange(e.target.value)} onBlur={onBlur} />
+    ),
+    select:     SelectInput,
+    multiselect: SelectInput,
+    radio:      SelectInput,
+    checkbox:   CheckboxInput,
+    switch:     CheckboxInput,
+  },
+  FormItem,
+  inlineTypes: ['checkbox', 'switch'], // این انواع FormItem نمی‌گیرند
+})
+```
+
+::: tip
+راهنمای کامل شامل تمام ۱۳ نوع فیلد را در [ساخت UIAdapter سفارشی](/fa/guide/custom-ui-adapter) ببینید.
+:::
+
 ---
 
 ## `UIFieldProps`
