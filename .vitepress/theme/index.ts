@@ -2,6 +2,7 @@ import { h } from "vue";
 import DefaultTheme from "vitepress/theme";
 import "./custom.css";
 import FormDemo from "./FormDemo.vue";
+import FormDemoTabs from "./components/FormDemoTabs.vue";
 
 export default {
   extends: DefaultTheme,
@@ -11,6 +12,9 @@ export default {
     });
   },
   enhanceApp({ app, router, siteData }) {
+    // Legacy bare-preview component — kept for backward compatibility
     app.component("FormDemo", FormDemo);
+    // New tabbed Preview + Code component
+    app.component("FormDemoTabs", FormDemoTabs);
   },
 };

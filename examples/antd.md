@@ -18,6 +18,8 @@ import { AntDUIAdapter } from "raven-form/ui/antd";
 
 ## Example 1 — Login form
 
+<FormDemoTabs demo="LoginDemo">
+
 ```tsx
 import { RavenForm } from "raven-form";
 import { AntDAdapter } from "raven-form/adapters/antd";
@@ -75,11 +77,13 @@ export function LoginForm() {
 }
 ```
 
-<FormDemo demo="LoginDemo" />
+</FormDemoTabs>
 
 ---
 
 ## Example 2 — Employee profile
+
+<FormDemoTabs demo="EmployeeDemo">
 
 ```tsx
 import { RavenForm } from "raven-form";
@@ -246,11 +250,13 @@ export function EmployeeProfile({
 }
 ```
 
-<FormDemo demo="EmployeeDemo" />
+</FormDemoTabs>
 
 ---
 
 ## Example 3 — Multi-step onboarding wizard
+
+<FormDemoTabs demo="WizardDemo">
 
 ```tsx
 import { RavenWizardForm } from "raven-form";
@@ -393,11 +399,13 @@ export function OnboardingWizard() {
 }
 ```
 
-<FormDemo demo="WizardDemo" />
+</FormDemoTabs>
 
 ---
 
 ## Example 4 — Dynamic contacts repeater
+
+<FormDemoTabs demo="RepeaterDemo">
 
 ```tsx
 import { RavenForm } from "raven-form";
@@ -457,4 +465,4 @@ export function ContactsForm() {
 }
 ```
 
-<FormDemo demo="RepeaterDemo" />
+</FormDemoTabs>

@@ -20,6 +20,8 @@ import { ShadCNUIAdapter } from "raven-form/ui/shadcn";
 
 ## Example 1 — Sign-up form
 
+<FormDemoTabs demo="SignupDemo">
+
 ```tsx
 import { RavenForm } from "raven-form";
 import { RHFAdapter } from "raven-form/adapters/rhf";
@@ -113,11 +115,13 @@ export function SignUpForm() {
 }
 ```
 
-<FormDemo demo="SignupDemo" />
+</FormDemoTabs>
 
 ---
 
 ## Example 2 — Settings page
+
+<FormDemoTabs demo="SettingsDemo">
 
 ```tsx
 import { RavenForm } from "raven-form";
@@ -263,11 +267,13 @@ export function SettingsPage({
 }
 ```
 
-<FormDemo demo="SettingsDemo" />
+</FormDemoTabs>
 
 ---
 
 ## Example 3 — Invoice builder with repeater
+
+<FormDemoTabs demo="RepeaterDemo">
 
 ```tsx
 import { RavenForm } from "raven-form";
@@ -373,11 +379,13 @@ export function InvoiceBuilder() {
 }
 ```
 
-<FormDemo demo="RepeaterDemo" />
+</FormDemoTabs>
 
 ---
 
 ## Example 4 — Color/Rating custom fields
+
+<FormDemoTabs demo="FeedbackDemo">
 
 ```tsx
 import { RavenForm } from "raven-form";
@@ -459,4 +467,4 @@ export function FeedbackForm() {
 }
 ```
 
-<FormDemo demo="FeedbackDemo" />
+</FormDemoTabs>
