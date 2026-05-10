@@ -2,6 +2,7 @@
 import { writeFileSync } from "fs";
 import { resolve } from "path";
 import react from "@vitejs/plugin-react";
+import tailwindcss from "@tailwindcss/vite";
 
 const enSidebar = [
   {
@@ -111,7 +112,7 @@ export default defineConfig({
   base: "/raven-form-doc/",
 
   vite: {
-    plugins: [react()],
+    plugins: [react(), tailwindcss()],
   },
 
   markdown: {

@@ -98,6 +98,8 @@ features:
 
 ## مثال ساده — از اسکیما تا فرم در چند ثانیه
 
+<FormDemoTabs demo="EmployeeDemo">
+
 ```tsx
 import { RavenForm } from "raven-form";
 import { RHFAdapter } from "raven-form/adapters/rhf";
@@ -148,5 +150,7 @@ export function MyForm() {
   );
 }
 ```
+
+</FormDemoTabs>
 
 </div>

@@ -188,6 +188,8 @@ features:
   <h2 class="section-title">From schema to production form in seconds.</h2>
   <p class="section-sub">One component. One schema object. Plug in your adapters and ship.</p>
 
+<FormDemoTabs demo="EmployeeDemo">
+
 ```tsx
 import { RavenForm } from "raven-form";
 import { RHFAdapter } from "raven-form/adapters/rhf";
@@ -263,12 +265,16 @@ export function ProfileForm() {
 }
 ```
 
+</FormDemoTabs>
+
 </div>
 
 <div class="landing-section wizard-section">
   <div class="section-badge">Multi-step</div>
   <h2 class="section-title">Turn any schema into a guided wizard — zero extra setup.</h2>
   <p class="section-sub">RavenWizardForm renders a StepBar, gates step advancement with per-step field validation via <code>useTrigger</code>, and tracks completed steps automatically.</p>
+
+<FormDemoTabs demo="WizardDemo">
 
 ```tsx
 import { RavenWizardForm } from "raven-form";
@@ -318,11 +324,15 @@ export function RegistrationWizard() {
 }
 ```
 
+</FormDemoTabs>
+
 </div>
 
 <div class="landing-section repeater-section">
   <div class="section-badge">Dynamic rows</div>
   <h2 class="section-title">Repeater fields — let users build their own rows.</h2>
+
+<FormDemoTabs demo="RepeaterDemo">
 
 ```tsx
 const schema = {
@@ -355,6 +365,8 @@ const schema = {
   ],
 };
 ```
+
+</FormDemoTabs>
 
 </div>
 

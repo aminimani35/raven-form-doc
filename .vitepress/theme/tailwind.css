@@ -1,0 +1,28 @@
+@import "tailwindcss";
+
+/* ── Design tokens used by the form engine's internal components ── */
+@theme {
+  --color-primary:             #8b5cf6;
+  --color-primary-foreground:  #ffffff;
+  --color-muted:               #f3f4f6;
+  --color-muted-foreground:    #6b7280;
+  --color-background:          #ffffff;
+  --color-foreground:          #111827;
+  --color-input:               #d1d5db;
+  --color-border:              #e5e7eb;
+  --color-ring:                #8b5cf6;
+  --color-destructive:         #ef4444;
+}
+
+/* ── Dark mode overrides (VitePress uses .dark on <html>) ── */
+.dark {
+  --color-primary:             #a78bfa;
+  --color-primary-foreground:  #1e1b4b;
+  --color-muted:               #27272a;
+  --color-muted-foreground:    #a1a1aa;
+  --color-background:          #18181b;
+  --color-foreground:          #fafafa;
+  --color-input:               #3f3f46;
+  --color-border:              #3f3f46;
+  --color-ring:                #a78bfa;
+}
