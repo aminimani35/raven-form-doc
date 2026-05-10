@@ -1,84 +1,182 @@
-# Getting Started
+﻿# Getting Started
 
-Welcome to RavenForm! This guide will help you get up and running with the full-featured form engine.
+**Raven Form** is a schema-driven, adapter-based form engine for React. Describe your form once, choose a form-state library and a UI kit, and Raven Form handles the rest.
 
 ## Installation
 
-Install RavenForm using npm:
-
 ```bash
-npm install raven-form
+# npm
+npm install raven-form react-hook-form
+
+# pnpm
+pnpm add raven-form react-hook-form
 ```
 
-Or with yarn:
+> **UI peer dependencies** — install the adapter for the UI library you prefer:
+>
+> ```bash
+> # ShadCN/ui (recommended — Tailwind-based)
+> npm install @shadcn/ui
+>
+> # Ant Design
+> npm install antd
+> ```
 
-```bash
-yarn add raven-form
+---
+
+## Your first form
+
+### 1. Define a schema
+
+```ts
+import type { FormSchema } from "raven-form";
+
+const schema: FormSchema = {
+  fields: [
+    {
+      name: "firstName",
+      type: "text",
+      label: "First Name",
+      colSpan: 6,
+      validation: { required: "First name is required" },
+    },
+    {
+      name: "lastName",
+      type: "text",
+      label: "Last Name",
+      colSpan: 6,
+      validation: { required: true },
+    },
+    {
+      name: "email",
+      type: "email",
+      label: "Email Address",
+      colSpan: 12,
+      validation: {
+        required: true,
+        pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+      },
+    },
+    {
+      name: "role",
+      type: "select",
+      label: "Role",
+      colSpan: 6,
+      options: [
+        { label: "Admin", value: "admin" },
+        { label: "Editor", value: "editor" },
+        { label: "Viewer", value: "viewer" },
+      ],
+    },
+    {
+      name: "active",
+      type: "switch",
+      label: "Active Account",
+      colSpan: 6,
+      defaultValue: true,
+    },
+  ],
+};
 ```
 
-## Basic Usage
-
-Here's a simple example to create your first form:
+### 2. Render with `RavenForm`
 
 ```tsx
-import { RavenForm } from 'raven-form';
+import { RavenForm } from "raven-form";
+import { RHFAdapter } from "raven-form/adapters/rhf";
+import { ShadCNUIAdapter } from "raven-form/ui/shadcn";
 
-function MyForm() {
+export function UserForm() {
+  const handleSubmit = async (values: Record<string, unknown>) => {
+    console.log("Submitted:", values);
+  };
+
   return (
     <RavenForm
-      schema={{
-        fields: [
-          {
-            name: 'email',
-            type: 'email',
-            label: 'Email Address',
-            required: true
-          },
-          {
-            name: 'password',
-            type: 'password',
-            label: 'Password',
-            required: true
-          }
-        ]
-      }}
-      onSubmit={(values) => {
-        console.log('Form submitted:', values);
-      }}
+      schema={schema}
+      adapter={RHFAdapter}
+      ui={ShadCNUIAdapter}
+      onSubmit={handleSubmit}
+      submitLabel="Save User"
     />
   );
 }
 ```
 
-## Form Configuration
+That is all — Raven Form renders a validated, accessible form with a responsive 12-column grid.
 
-RavenForm uses a schema-based approach to define your forms. The schema object includes:
+---
 
-- **fields**: An array of field definitions
-- **validation**: Custom validation rules
-- **layout**: Form layout configuration
+## Global setup with `RavenFormProvider`
 
-### Field Types
+Instead of passing `adapter` and `ui` on every `<RavenForm>` component, wrap your application once with `<RavenFormProvider>` and set them globally:
 
-RavenForm supports various field types:
+```tsx
+// main.tsx (or App root)
+import { RavenFormProvider } from "raven-form";
+import { RHFAdapter } from "raven-form/adapters/rhf";
+import { ShadCNUIAdapter } from "raven-form/ui/shadcn";
 
-- `text` - Basic text input
-- `email` - Email input with validation
-- `password` - Password input
-- `number` - Numeric input
-- `select` - Dropdown selection
-- `checkbox` - Single checkbox
-- `radio` - Radio button group
-- `textarea` - Multi-line text input
-- `date` - Date picker
+ReactDOM.createRoot(document.getElementById("root")!).render(
+  <RavenFormProvider formAdapter={RHFAdapter} uiAdapter={ShadCNUIAdapter}>
+    <App />
+  </RavenFormProvider>,
+);
+```
 
-## Next Steps
+Any `<RavenForm>`, `<RavenWizardForm>`, or `<RavenRepeaterField>` component nested under the provider will automatically inherit the configured adapters — no need to repeat them per form:
 
-::: tip
-Check out the [API Examples](/api-examples) to see more advanced usage patterns.
-:::
+```tsx
+// UserForm.tsx — no adapter or ui props needed
+import { RavenForm } from "raven-form";
 
-- Learn about [form validation](#)
-- Explore [custom field types](#)
-- Configure [form layouts](#)
-- Handle [async submissions](#)
+export function UserForm() {
+  return (
+    <RavenForm
+      schema={schema}
+      onSubmit={handleSubmit}
+      submitLabel="Save User"
+    />
+  );
+}
+```
+
+> **Per-form override:** You can still pass `adapter` or `ui` directly on any individual form to override the provider value for that specific instance.
+
+---
+
+## RavenForm props
+
+| Prop                 | Type                                | Required | Description                              |
+| -------------------- | ----------------------------------- | -------- | ---------------------------------------- |
+| `schema`             | `FormSchema`                        | ✅       | Field definitions and layout config      |
+| `adapter`            | `FormAdapter`                       | ✅       | Form-state library adapter               |
+| `ui`                 | `UIAdapter`                         | ✅       | UI component library adapter             |
+| `onSubmit`           | `(values) => void \| Promise<void>` | ✅       | Submission handler                       |
+| `defaultValues`      | `Record<string, unknown>`           | —        | Runtime default values override          |
+| `submitLabel`        | `string`                            | —        | Submit button text (default: `"Submit"`) |
+| `showStateInspector` | `boolean`                           | —        | Show live form-state debug panel         |
+
+---
+
+## FormSchema structure
+
+```ts
+interface FormSchema {
+  fields: FormField[]; // field definitions
+  columns?: number; // grid columns (default: 12)
+  gap?: string; // gap utility class e.g. "gap-4"
+  steps?: WizardStep[]; // wizard steps — used with RavenWizard
+}
+```
+
+---
+
+## Next steps
+
+- [Field Types](/guide/field-types) — all 25+ supported field types
+- [Validation](/guide/validation) — sync, async, pattern, cross-field
+- [Form Adapters](/guide/adapters) — RHF, AntD, custom
+- [UI Adapters](/guide/ui-adapters) — ShadCN, AntD, custom
+- [Wizard Forms](/guide/wizard) — multi-step guided forms
+- [Repeater Fields](/guide/repeater) — dynamic row arrays

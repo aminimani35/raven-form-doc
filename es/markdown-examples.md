@@ -1,4 +1,4 @@
-# Ejemplos de Markdown
+﻿# Ejemplos de Markdown
 
 Esta página demuestra algunos de los ejemplos de markdown integrados que se pueden usar en archivos de VitePress.
 
